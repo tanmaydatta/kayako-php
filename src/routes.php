@@ -8,8 +8,7 @@ $app->get('/tweet', function ($request, $response, $args) {
     //pass parameter as count
     $controller = new TwitterApiController();
 
-    // echo $param['count'];
-    $result = $controller->fetchTweet($param['count']);
+    $result = $controller->fetchTweet($param);
     return $result;
 
 });

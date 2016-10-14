@@ -1,32 +1,31 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: shivangi
- * Date: 10/14/16
- * Time: 6:14 PM
- */
 
 namespace Kayako\Controllers;
 
 use Kayako\NetworkCalls\TwitterApiCalls;
+use Kayako\Model\Tweets;
 
 class TwitterApiController
 {
     protected $apiCall;
+    protected $tweet;
     public function __construct()
     {
         $this->apiCall = new TwitterApiCalls();
+        $this->tweet = new Tweets();
     }
     
-    public function fetchTweet($number_of_weeks)
+    public function fetchTweet($param)
     {
         try {
-            $result = $this->apiCall->executeSearchApi($number_of_weeks);
+            $result = $this->apiCall->executeSearchApi($param);
+            $final = $this->tweet->extractRetweetedTweets($result);
         }
         catch (\Exception $e)
         {
-            $result = "Error in fetching data";
+            $final = [];
+            $final["status"] = "failed";
         }
-        return $result;
+        return $final;
     }
 }
