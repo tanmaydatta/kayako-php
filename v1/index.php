@@ -14,3 +14,4 @@ $app->get('/hello', function (Request $request, Response $response) {
 $app->run();
 // <!-- $app = new \Slim\Slim(); -->
 
+?>
