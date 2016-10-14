@@ -20,6 +20,7 @@ class Tweets
                 $ret[]=$tweet;
             }
         }
+        
         return json_encode($response);
     }
 

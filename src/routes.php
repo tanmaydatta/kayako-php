@@ -9,8 +9,9 @@ $app->get('/tweet', function ($request, $response, $args) {
     $controller = new TwitterApiController();
 
     $result = $controller->fetchTweet($param);
-    return $result;
-
+    return $response->withStatus(200)
+        ->withHeader('Content-Type', 'application/json')
+        ->write($result);
 });
 
 
