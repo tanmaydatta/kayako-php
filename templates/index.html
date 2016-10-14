@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>Kayako Challenge</title>
+        <link href='//fonts.googleapis.com/css?family=Lato:300' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.4/semantic.min.css">
+        <style>
+            body {
+                margin: 50px 0 0 0;
+                padding: 0;
+                width: 100%;
+                font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                text-align: center;
+                color: #aaa;
+                font-size: 18px;
+            }
+
+            h1 {
+                color: #719e40;
+                letter-spacing: -3px;
+                font-family: 'Lato', sans-serif;
+                font-size: 100px;
+                font-weight: 200;
+                margin-bottom: 0;
+            }
+
+            .ui.icon.input input {
+                min-width: 20rem;
+            }
+            .ui.icon.input button {
+                min-width: 5rem;
+                margin-left: 2rem;
+            }
+            .ui.icon.input i {
+                margin: auto;   
+            }
+
+            .cards-container { margin-top: 5vh; }
+            .card{
+                border-radius: 5px;
+                background-color: #ccc;
+                text-align: left;
+                margin-top: 1.5rem;
+            }
+            .card .top-heading {
+                padding: 1.5rem 0.5rem;
+                background-color: #2185D0;
+                color: #fff;
+                border-top-right-radius: 5px;
+                border-top-left-radius: 5px; 
+            }
+            .card h2 { color: #fff; }
+            .content { padding: 1.5rem 2.3rem; }
+            .content .rt { margin-top: 1rem; }
+        </style>
+    </head>
+    <body>
+        <div class="ui container">
+            <div class="ui center aligned grid">
+                <div class="row">
+                    <h1 class="ui header">Kayako Challenge</h1>
+                </div>
+
+                <div class="row">
+                    <div class="ui seven wide column">
+                        <form class="ui icon input">
+                            <input id="q" type="text" placeholder="Search...">
+                            <button id="submit_button" type="submit" class="ui blue button">
+                                <i class="search link icon"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui center aligned grid cards-container">
+                <div class="nine wide column" id="results">
+                    
+                </div>
+            </div>
+
+            <div class="ui center aligned row" style="margin-top:2%">
+                <button id="load" class="ui blue button">Load More!</button>
+            </div>
+        </div>
+    </body>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        'use strict';
+        var URL = "http://slim-tanmay.herokuapp.com/tweet";
+        var max_id;
+        var insertCard = function(username, text, rt) {
+            return ' <div class="row card"> \
+                        <div class="top-heading"> \
+                            <h2 class="ui header">@' + username + '</h2> \
+                        </div> \
+                        <div  class="content">\
+                            <div class="row">\
+                                <h4 class="ui header">' + text + '\
+                                </h4>\
+                            </div>\
+                            <div class="row rt">\
+                                <h3 class="ui header">\
+                                    RT: ' + rt + '\
+                                </h3>\
+                            </div>\
+                        </div>\
+                    </div>';
+        }
+        $("#submit_button").click(function(e) {
+            e.preventDefault();
+            $("#results").html('');
+            max_id = "999999999999999999";
+            $.get( URL + "?q=" + $("#q").val() + "&max_id=" + max_id, function( data ) {
+                data.tweets.forEach( function (tweet) {
+                    $("#results").append(insertCard(tweet.user.screen_name, tweet.text, tweet.retweet_count));
+                });
+                if(data.next_url) {         
+                    max_id = data.next_url.split("?")[1].split("=")[1].split("&")[0];
+                }
+                else {
+                    max_id = 1;
+                }
+            });
+        });
+        $("#load").click(function() {
+            $("#load").addClass("loading");
+            $.get( URL + "?q=" + $("#q").val() + "&max_id=" + max_id, function( data ) {
+                $("#load").removeClass("loading");
+                data.tweets.forEach( function (tweet) {
+                    $("#results").append(insertCard(tweet.user.screen_name, tweet.text, tweet.retweet_count));
+                });
+                if(data.next_url) {         
+                    max_id = data.next_url.split("?")[1].split("=")[1].split("&")[0];
+                }
+                else {
+                    max_id = 1;
+                }
+            });
+        });
+    </script>
+</html>
