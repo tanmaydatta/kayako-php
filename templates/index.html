@@ -125,6 +125,7 @@
             });
         });
         $("#load").click(function() {
+            if(max_id==1) return;
             $("#load").addClass("loading");
             $.get( URL + "?q=" + $("#q").val() + "&max_id=" + max_id, function( data ) {
                 $("#load").removeClass("loading");
