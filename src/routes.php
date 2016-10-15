@@ -15,7 +15,7 @@ $app->get('/tweet', function ($request, $response, $args) {
 });
 
 $app->get('/', function ($request, $response, $args) use ($app) {
-	$view = new \Slim\Views\PhpRenderer('../templates');
+	$view = new \Slim\Views\PhpRenderer('templates');
 	return $view->render($response, '/index.html');
 });
 

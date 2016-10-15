@@ -5,7 +5,7 @@ use Abraham\TwitterOAuth\TwitterOAuth;
 
 class AuthorizationCredentials
 {
-   protected $token;
+    protected $token;
 
 
     public function __construct()
