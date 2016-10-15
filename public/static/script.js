@@ -1,6 +1,6 @@
 'use strict';
-// var URL = "http://localhost:8000/tweet";
-var URL = "http://slim-tanmay.herokuapp.com/tweet";
+var URL = "http://localhost:8000/tweet";
+// var URL = "http://slim-tanmay.herokuapp.com/tweet";
 var max_id;
 var insertCard = function(username, text, rt) {
     return ' <div class="row card"> \
@@ -23,6 +23,7 @@ var insertCard = function(username, text, rt) {
 $("#submit_button").click(function(e) {
     e.preventDefault();
     $("#results").html('');
+    $("#results").parent().addClass("loader");
     max_id = 999999999999999999;
     $.get( URL + "?q=" + $("#q").val() + "&max_id=" + max_id, function( data ) {
         data.tweets.forEach( function (tweet) {
@@ -30,6 +31,8 @@ $("#submit_button").click(function(e) {
             max_id = Math.min(max_id, tweet.id);
         });
         max_id = max_id - 1;
+        $("#results").parent().removeClass("loader");
+        $("#load").parent().show();
     });
 });
 $("#load").click(function() {
