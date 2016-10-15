@@ -17,7 +17,6 @@ class Tweets
             if($retweet_count>=1)
             {
                 $response["tweets"][]=$tweet;
-                $ret[]=$tweet;
             }
         }
         
